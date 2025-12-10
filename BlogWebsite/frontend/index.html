@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Blog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/CSS/style.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <div class="logo">MyBlog</div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="#featured">Featured</a></li>
+                <li><a href="#categories">Categories</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="signup.html" class="signup-btn">Sign Up</a></li>
+            </ul>
+            <div class="hamburger">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+        <div class="hero">
+            <h1>Welcome to My Blog</h1>
+            <p>Discover amazing stories, creative ideas, and share your thoughts with the world</p>
+            <a href="#featured" class="cta-button">Explore Articles</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="featured" class="featured-posts">
+            <h2>Featured Posts</h2>
+            <div class="posts-grid">
+                <article class="post-card">
+                    <div class="post-image">
+                        <img src="https://source.unsplash.com/random/400x300?blog" alt="Blog Post">
+                    </div>
+                    <div class="post-content">
+                        <span class="category">Technology</span>
+                        <h3>10 Tips for Better Web Development</h3>
+                        <p class="post-excerpt">Learn the latest web development techniques to improve your workflow and build better websites.</p>
+                        <div class="post-meta">
+                            <span class="author">By John Doe</span>
+                            <span class="date">December 5, 2023</span>
+                        </div>
+                        <a href="post.html" class="read-more">Read More</a>
+                    </div>
+                </article>
+
+                <article class="post-card">
+                    <div class="post-image">
+                        <img src="https://source.unsplash.com/random/400x300?coding" alt="Blog Post">
+                    </div>
+                    <div class="post-content">
+                        <span class="category">Programming</span>
+                        <h3>Getting Started with JavaScript</h3>
+                        <p class="post-excerpt">A beginner's guide to understanding the fundamentals of JavaScript programming language.</p>
+                        <div class="post-meta">
+                            <span class="author">By Jane Smith</span>
+                            <span class="date">December 3, 2023</span>
+                        </div>
+                        <a href="post.html" class="read-more">Read More</a>
+                    </div>
+                </article>
+
+                <article class="post-card">
+                    <div class="post-image">
+                        <img src="https://source.unsplash.com/random/400x300?design" alt="Blog Post">
+                    </div>
+                    <div class="post-content">
+                        <span class="category">Design</span>
+                        <h3>UI/UX Best Practices</h3>
+                        <p class="post-excerpt">Essential UI/UX design principles that every designer should know in 2023.</p>
+                        <div class="post-meta">
+                            <span class="author">By Alex Johnson</span>
+                            <span class="date">November 30, 2023</span>
+                        </div>
+                        <a href="post.html" class="read-more">Read More</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section id="newsletter" class="newsletter">
+            <div class="newsletter-content">
+                <h2>Subscribe to Our Newsletter</h2>
+                <p>Get the latest posts delivered right to your inbox</p>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Enter your email" required>
+                    <button type="submit" class="subscribe-btn">Subscribe</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Us</h3>
+                <p>Sharing knowledge and ideas through quality content.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#featured">Featured</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Connect With Us</h3>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 MyBlog. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+</body>
+</html>
