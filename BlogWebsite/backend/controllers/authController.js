@@ -1,13 +1,24 @@
 const jwt = require('jsonwebtoken');
-const User = require('../models/userModel');
 const { validationResult } = require('express-validator');
 const { JWT_SECRET, JWT_EXPIRES_IN } = require('../config/config');
+
+// In-memory storage for demo purposes
+const users = [];
+let userIdCounter = 1;
+
+// Export users array for use in auth middleware
+module.exports.users = users;
 
 // Generate JWT Token
 const generateToken = (id) => {
     return jwt.sign({ id }, JWT_SECRET, {
         expiresIn: JWT_EXPIRES_IN
     });
+};
+
+// Simple password hashing for demo (in production, use bcrypt)
+const hashPassword = (password) => {
+    return Buffer.from(password).toString('base64');
 };
 
 // @desc    Register user
@@ -27,8 +38,8 @@ exports.register = async (req, res) => {
 
     try {
         // Check if user exists
-        let user = await User.findOne({ email });
-        if (user) {
+        const userExists = users.some(user => user.email === email);
+        if (userExists) {
             return res.status(400).json({
                 status: 'error',
                 message: 'User already exists'
@@ -36,26 +47,27 @@ exports.register = async (req, res) => {
         }
 
         // Create user
-        user = new User({
+        const user = {
+            id: userIdCounter++,
             name,
             email,
-            password,
-            role: req.body.role || 'user'
-        });
+            password: hashPassword(password), // In production, use bcrypt
+            role: req.body.role || 'user',
+            createdAt: new Date().toISOString()
+        };
 
-        await user.save();
+        users.push(user);
 
         // Create token
-        const token = generateToken(user._id);
+        const token = generateToken(user.id);
 
         // Remove password from output
-        user = user.toObject();
-        delete user.password;
+        const { password: _, ...userWithoutPassword } = user;
 
         res.status(201).json({
             status: 'success',
             token,
-            user
+            user: userWithoutPassword
         });
 
     } catch (error) {
@@ -84,7 +96,7 @@ exports.login = async (req, res) => {
 
     try {
         // Check if user exists
-        const user = await User.findOne({ email }).select('+password');
+        const user = users.find(u => u.email === email);
         if (!user) {
             return res.status(401).json({
                 status: 'error',
@@ -92,8 +104,8 @@ exports.login = async (req, res) => {
             });
         }
 
-        // Check password
-        const isMatch = await user.correctPassword(password, user.password);
+        // Check password (in production, use bcrypt.compare)
+        const isMatch = user.password === hashPassword(password);
         if (!isMatch) {
             return res.status(401).json({
                 status: 'error',
@@ -102,16 +114,15 @@ exports.login = async (req, res) => {
         }
 
         // Create token
-        const token = generateToken(user._id);
+        const token = generateToken(user.id);
 
         // Remove password from output
-        const userObj = user.toObject();
-        delete userObj.password;
+        const { password: _, ...userWithoutPassword } = user;
 
         res.status(200).json({
             status: 'success',
             token,
-            user: userObj
+            user: userWithoutPassword
         });
 
     } catch (error) {
@@ -128,10 +139,21 @@ exports.login = async (req, res) => {
 // @access  Private
 exports.getMe = async (req, res) => {
     try {
-        const user = await User.findById(req.user.id).select('-password');
+        const user = users.find(u => u.id === req.user.id);
+        
+        if (!user) {
+            return res.status(404).json({
+                status: 'error',
+                message: 'User not found'
+            });
+        }
+
+        // Remove password from output
+        const { password: _, ...userWithoutPassword } = user;
+
         res.status(200).json({
             status: 'success',
-            data: user
+            user: userWithoutPassword
         });
     } catch (error) {
         console.error('Get me error:', error);

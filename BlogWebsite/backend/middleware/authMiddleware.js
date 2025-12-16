@@ -1,8 +1,10 @@
 const jwt = require('jsonwebtoken');
-const User = require('../models/userModel');
 const { JWT_SECRET } = require('../config/config');
 
-exports.protect = async (req, res, next) => {
+// In-memory users (import from authController)
+const { users } = require('../controllers/authController');
+
+exports.protect = (req, res, next) => {
     try {
         let token;
 
@@ -14,7 +16,7 @@ exports.protect = async (req, res, next) => {
         if (!token) {
             return res.status(401).json({
                 status: 'error',
-                message: 'Not authorized to access this route'
+                message: 'Not authorized to access this route. Please log in.'
             });
         }
 
@@ -22,7 +24,19 @@ exports.protect = async (req, res, next) => {
         const decoded = jwt.verify(token, JWT_SECRET);
 
         // Get user from token
-        req.user = await User.findById(decoded.id).select('-password');
+        const user = users.find(u => u.id === decoded.id);
+        
+        if (!user) {
+            return res.status(401).json({
+                status: 'error',
+                message: 'User not found'
+            });
+        }
+
+        // Remove password from user object
+        const { password, ...userWithoutPassword } = user;
+        req.user = userWithoutPassword;
+        
         next();
     } catch (error) {
         console.error('Auth middleware error:', error);
@@ -36,10 +50,10 @@ exports.protect = async (req, res, next) => {
 // Grant access to specific roles
 exports.authorize = (...roles) => {
     return (req, res, next) => {
-        if (!roles.includes(req.user.role)) {
+        if (!req.user || !roles.includes(req.user.role)) {
             return res.status(403).json({
                 status: 'error',
-                message: `User role ${req.user.role} is not authorized to access this route`
+                message: `You are not authorized to access this route`
             });
         }
         next();
