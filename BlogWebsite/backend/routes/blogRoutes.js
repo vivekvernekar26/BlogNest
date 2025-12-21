@@ -1,11 +1,13 @@
 const express = require('express');
-const { protect } = require('../middleware/authMiddleware');
+const { protect, authorize } = require('../middleware/authMiddleware');
 const {
     getPosts,
     getPost,
     createPost,
     updatePost,
-    deletePost
+    deletePost,
+    getPendingPosts,
+    approvePost
 } = require('../controllers/blogController');
 
 const router = express.Router();
@@ -26,5 +28,12 @@ router.route('/')
 router.route('/:id')
     .patch(updatePost)
     .delete(deletePost);
+
+// Admin routes
+router.route('/admin/pending')
+    .get(authorize('admin'), getPendingPosts);
+
+router.route('/admin/:id/approve')
+    .patch(authorize('admin'), approvePost);
 
 module.exports = router;

@@ -2,7 +2,7 @@
 const API_URL = 'http://localhost:5000/api';
 
 // DOM Elements
-const postsGrid = document.querySelector('.posts-grid');
+const postsGrid = document.getElementById('latest-posts-grid');
 const loadingIndicator = document.getElementById('loading-indicator');
 
 // Fetch and display blog posts
@@ -78,8 +78,8 @@ function showError(message) {
     }
 }
 
-// Check if we're on the homepage and fetch posts
-if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/') {
+// Check if we're on the homepage and the latest posts grid exists before fetching
+if ((window.location.pathname.endsWith('index.html') || window.location.pathname === '/') && postsGrid) {
     document.addEventListener('DOMContentLoaded', fetchPosts);
 }
 

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard - Pending Posts</title>
+  <link rel="stylesheet" href="/CSS/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    .admin-card { background:#fff; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); overflow:hidden; display:flex; flex-direction:column; }
+    .admin-card .content { padding:16px; }
+    .admin-card .actions { display:flex; gap:8px; padding:12px 16px; border-top:1px solid #eee; justify-content:flex-end; }
+    .btn { padding:8px 12px; border:none; border-radius:6px; cursor:pointer; }
+    .btn-approve { background:#16a34a; color:#fff; }
+    .alert { padding:10px; border-radius:6px; margin:10px 0; }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <nav class="navbar">
+      <div class="logo">MyBlog Admin</div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="#index.html" id="logout-link">Logout</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container" style="padding: 2rem 1rem;">
+    <section>
+      <h1>Pending Posts</h1>
+      <p>Approve posts to make them visible on the main website.</p>
+      <div id="admin-alert" style="display:none;" class="alert"></div>
+      <div id="pending-list" class="posts-grid"></div>
+      <div id="loading" style="display:none; text-align:center; margin-top:1rem;">Loading...</div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-bottom">
+      <p>&copy; 2023 MyBlog. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/js/dashboard.js"></script>
+</body>
+</html>

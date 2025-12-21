@@ -66,9 +66,31 @@ ul {
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
+/* Secondary CTA: white background, primary text */
+.cta-secondary {
+    background-color: #fffefe;
+    color: var(--primary-color);
+    border: 2px solid rgba(37, 99, 235, 0.3);
+    margin-left: 12px;
+}
+.cta-secondary:hover {
+    background-color: #f8fafc;
+    color: var(--secondary-color);
+}
+
+/* Ensure hero CTA buttons are visible and spaced */
+.hero .cta-button { display: inline-block; position: relative; z-index: 2; }
+.hero .cta-button + .cta-button { margin-left: 14px; }
+.hero .cta-button.cta-secondary {
+    background: #ffffff !important;
+    color: var(--primary-color) !important;
+    border: 2px solid var(--primary-color) !important;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
 /* Header & Navigation */
 .header {
-    background: linear-gradient(135deg, #2563eb, #1e40af);
+    background: linear-gradient(135deg, #316ef1, #1e40af);
     color: white;
     position: relative;
 }
@@ -91,7 +113,8 @@ ul {
 
 .nav-links {
     display: flex;
-    gap: 30px;
+    gap: 24px;
+    align-items: center;
 }
 
 .nav-links a {
@@ -122,20 +145,28 @@ ul {
 }
 
 .create-btn {
-    background-color: white;
+    background-color: #ffffff;
     color: var(--primary-color) !important;
-    padding: 8px 20px;
-    border-radius: 30px;
-    font-weight: 600;
-    transition: all 0.3s ease;
+    padding: 8px 18px;
+    border-radius: 9999px;
+    border: 1px solid rgba(255,255,255,0.5);
+    font-weight: 700;
+    transition: all 0.2s ease;
     display: inline-block;
     text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
 .create-btn:hover {
     background-color: #f0f4ff;
-    transform: translateY(-2px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* Ensure the create button remains visible on slightly narrow desktops */
+@media (max-width: 1100px) and (min-width: 769px) {
+    .nav-links { gap: 16px; }
+    .create-btn { padding: 8px 14px; }
 }
 
 .hamburger {
@@ -281,14 +312,22 @@ ul {
 /* Newsletter Section */
 .newsletter {
     background-color: var(--light-bg);
-    padding: 80px 0;
+    padding: 80px 5%;
     text-align: center;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    align-items: start;
 }
 
 .newsletter-content {
-    max-width: 600px;
+    max-width: 700px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 30px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    text-align: left;
 }
 
 .newsletter h2 {
@@ -330,6 +369,77 @@ ul {
 
 .subscribe-btn:hover {
     background-color: var(--secondary-color);
+}
+
+/* Feedback card inside newsletter */
+.feedback-content {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 30px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    text-align: left;
+}
+
+.feedback-content h2 {
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+.feedback-content p {
+    color: var(--light-text);
+    margin-bottom: 20px;
+}
+
+.feedback-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.feedback-form input,
+.feedback-form textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feedback-form textarea {
+    grid-column: 1 / -1;
+    resize: vertical;
+    min-height: 120px;
+}
+
+.feedback-form input:focus,
+.feedback-form textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+}
+
+.feedback-form .btn {
+    grid-column: 1 / -1;
+    justify-self: start;
+    background: var(--primary-color);
+    color: #fff;
+}
+
+/* Two-column layout on larger screens */
+@media (min-width: 992px) {
+    .newsletter {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* Stack and full-width on small screens */
+@media (max-width: 576px) {
+    .feedback-form {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* Footer */
@@ -411,6 +521,12 @@ ul {
     border-top: 1px solid #374151;
     color: #9ca3af;
     font-size: 0.9rem;
+}
+
+.admin{
+    color: var(--primary-color);
+    font-weight: 600;
+    align-items: center;    
 }
 
 /* Responsive Styles */

@@ -6,6 +6,7 @@ const rateLimit = require('express-rate-limit');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const path = require('path');
+const connectDB = require('./config/db');
 
 // Import routes
 const authRoutes = require('./routes/authRoutes');
@@ -17,6 +18,9 @@ const app = express();
 // Environment variables
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const PORT = process.env.PORT || 5000;
+
+// Connect to database
+connectDB();
 
 // Set security HTTP headers
 app.use(helmet());

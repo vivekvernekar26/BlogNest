@@ -1,10 +1,8 @@
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = require('../config/config');
+const User = require('../models/userModel');
 
-// In-memory users (import from authController)
-const { users } = require('../controllers/authController');
-
-exports.protect = (req, res, next) => {
+exports.protect = async (req, res, next) => {
     try {
         let token;
 
@@ -23,8 +21,8 @@ exports.protect = (req, res, next) => {
         // Verify token
         const decoded = jwt.verify(token, JWT_SECRET);
 
-        // Get user from token
-        const user = users.find(u => u.id === decoded.id);
+        // Get user from DB
+        const user = await User.findById(decoded.id).select('-password');
         
         if (!user) {
             return res.status(401).json({
@@ -33,9 +31,14 @@ exports.protect = (req, res, next) => {
             });
         }
 
-        // Remove password from user object
-        const { password, ...userWithoutPassword } = user;
-        req.user = userWithoutPassword;
+        // Convert to plain object and remove password
+        const safeUser = user.toObject();
+        delete safeUser.password;
+        // ensure compatibility with code using req.user.id
+        if (!safeUser.id && safeUser._id) {
+            safeUser.id = String(safeUser._id);
+        }
+        req.user = safeUser;
         
         next();
     } catch (error) {

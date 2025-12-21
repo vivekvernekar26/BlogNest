@@ -1,13 +1,10 @@
 const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
 const { JWT_SECRET, JWT_EXPIRES_IN } = require('../config/config');
+const bcrypt = require('bcryptjs');
+const User = require('../models/userModel');
 
-// In-memory storage for demo purposes
-const users = [];
-let userIdCounter = 1;
-
-// Export users array for use in auth middleware
-module.exports.users = users;
+// Using MongoDB User model instead of in-memory storage
 
 // Generate JWT Token
 const generateToken = (id) => {
@@ -16,9 +13,9 @@ const generateToken = (id) => {
     });
 };
 
-// Simple password hashing for demo (in production, use bcrypt)
-const hashPassword = (password) => {
-    return Buffer.from(password).toString('base64');
+// Secure password hashing with bcrypt
+const hashPassword = async (password) => {
+    return await bcrypt.hash(password, 12);
 };
 
 // @desc    Register user
@@ -38,36 +35,33 @@ exports.register = async (req, res) => {
 
     try {
         // Check if user exists
-        const userExists = users.some(user => user.email === email);
-        if (userExists) {
+        const existing = await User.findOne({ email });
+        if (existing) {
             return res.status(400).json({
                 status: 'error',
                 message: 'User already exists'
             });
         }
 
-        // Create user
-        const user = {
-            id: userIdCounter++,
+        // Create user (password hashed by model pre-save hook)
+        const user = await User.create({
             name,
             email,
-            password: hashPassword(password), // In production, use bcrypt
-            role: req.body.role || 'user',
-            createdAt: new Date().toISOString()
-        };
-
-        users.push(user);
+            password,
+            role: req.body.role || 'user'
+        });
 
         // Create token
-        const token = generateToken(user.id);
+        const token = generateToken(user._id);
 
         // Remove password from output
-        const { password: _, ...userWithoutPassword } = user;
+        const userObj = user.toObject();
+        delete userObj.password;
 
         res.status(201).json({
             status: 'success',
             token,
-            user: userWithoutPassword
+            user: userObj
         });
 
     } catch (error) {
@@ -96,7 +90,7 @@ exports.login = async (req, res) => {
 
     try {
         // Check if user exists
-        const user = users.find(u => u.email === email);
+        const user = await User.findOne({ email }).select('+password');
         if (!user) {
             return res.status(401).json({
                 status: 'error',
@@ -104,8 +98,8 @@ exports.login = async (req, res) => {
             });
         }
 
-        // Check password (in production, use bcrypt.compare)
-        const isMatch = user.password === hashPassword(password);
+        // Check password
+        const isMatch = await user.correctPassword(password, user.password);
         if (!isMatch) {
             return res.status(401).json({
                 status: 'error',
@@ -114,15 +108,16 @@ exports.login = async (req, res) => {
         }
 
         // Create token
-        const token = generateToken(user.id);
+        const token = generateToken(user._id);
 
         // Remove password from output
-        const { password: _, ...userWithoutPassword } = user;
+        const userObj = user.toObject();
+        delete userObj.password;
 
         res.status(200).json({
             status: 'success',
             token,
-            user: userWithoutPassword
+            user: userObj
         });
 
     } catch (error) {
@@ -139,7 +134,7 @@ exports.login = async (req, res) => {
 // @access  Private
 exports.getMe = async (req, res) => {
     try {
-        const user = users.find(u => u.id === req.user.id);
+        const user = await User.findById(req.user.id).select('-password');
         
         if (!user) {
             return res.status(404).json({
@@ -148,12 +143,9 @@ exports.getMe = async (req, res) => {
             });
         }
 
-        // Remove password from output
-        const { password: _, ...userWithoutPassword } = user;
-
         res.status(200).json({
             status: 'success',
-            user: userWithoutPassword
+            user
         });
     } catch (error) {
         console.error('Get me error:', error);

@@ -6,11 +6,13 @@ let postIdCounter = 1;
 // @route   GET /api/posts
 // @access  Public
 exports.getPosts = (req, res) => {
+    // Only return approved posts publicly
+    const approvedPosts = posts.filter(p => p.approved === true);
     res.status(200).json({
         status: 'success',
-        results: posts.length,
+        results: approvedPosts.length,
         data: {
-            posts
+            posts: approvedPosts
         }
     });
 };
@@ -25,6 +27,14 @@ exports.getPost = (req, res) => {
         return res.status(404).json({
             status: 'error',
             message: 'No post found with that ID'
+        });
+    }
+
+    // Hide unapproved posts from public
+    if (!post.approved) {
+        return res.status(403).json({
+            status: 'error',
+            message: 'Post is awaiting approval'
         });
     }
 
@@ -63,7 +73,8 @@ exports.createPost = (req, res) => {
         author: req.user.id,
         authorName: req.user.name,
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
+        approved: false
     };
 
     posts.unshift(newPost); // Add to beginning of array (newest first)
@@ -151,5 +162,38 @@ exports.deletePost = (req, res) => {
     res.status(204).json({
         status: 'success',
         data: null
+    });
+};
+
+// @desc    Get pending (unapproved) posts
+// @route   GET /api/posts/admin/pending
+// @access  Private/Admin
+exports.getPendingPosts = (req, res) => {
+    const pending = posts.filter(p => !p.approved);
+    res.status(200).json({
+        status: 'success',
+        results: pending.length,
+        data: {
+            posts: pending
+        }
+    });
+};
+
+// @desc    Approve a post
+// @route   PATCH /api/posts/admin/:id/approve
+// @access  Private/Admin
+exports.approvePost = (req, res) => {
+    const post = posts.find(p => p.id === parseInt(req.params.id));
+    if (!post) {
+        return res.status(404).json({
+            status: 'error',
+            message: 'No post found with that ID'
+        });
+    }
+    post.approved = true;
+    post.updatedAt = new Date().toISOString();
+    res.status(200).json({
+        status: 'success',
+        data: { post }
     });
 };

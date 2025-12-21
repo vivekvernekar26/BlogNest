@@ -13,7 +13,10 @@
             <div class="logo">MyBlog</div>
             <ul class="nav-links">
                 <li><a href="index.html" class="active">Home</a></li>
-                <li><a href="create.html" class="create-btn">Create Blog</a></li>
+                <li><a href="#featured">Featured</a></li>
+                <li><a href="#featured">Blog</a></li>
+                <li><a href="aboutus.html">About Us</a></li>
+                <li><a href="create.html" class="cta-button cta-secondary">Create Blog</a></li>
             </ul>
             <div class="hamburger">
                 <i class="fas fa-bars"></i>
@@ -23,6 +26,7 @@
             <h1>Welcome to My Blog</h1>
             <p>Discover amazing stories, creative ideas, and share your thoughts with the world</p>
             <a href="#featured" class="cta-button">Explore Articles</a>
+            <a href="create.html" class="cta-button cta-secondary">Create Blog</a> 
         </div>
     </header>
 
@@ -77,26 +81,52 @@
                         <a href="post.html" class="read-more">Read More</a>
                     </div>
                 </article>
+
+                <article class="post-card">
+                    <div class="post-image">
+                        <img src="https://source.unsplash.com/random/400x300?design" alt="Blog Post">
+                    </div>
+                    <div class="post-content">
+                        <span class="category">Design</span>
+                        <h3>UI/UX Best Practices</h3>
+                        <p class="post-excerpt">Essential UI/UX design principles that every designer should know in 2023.</p>
+                        <div class="post-meta">
+                            <span class="author">By Alex Johnson</span>
+                            <span class="date">November 30, 2023</span>
+                        </div>
+                        <a href="post.html" class="read-more">Read More</a>
+                    </div>
+                </article>
             </div>
         </section>
 
         <section id="newsletter" class="newsletter">
-            <div class="newsletter-content">
-                <h2>Subscribe to Our Newsletter</h2>
-                <p>Get the latest posts delivered right to your inbox</p>
-                <form class="newsletter-form">
-                    <input type="email" placeholder="Enter your email" required>
-                    <button type="submit" class="subscribe-btn">Subscribe</button>
-                </form>
-            </div>
-        </section>
+    <div class="newsletter-content">
+        <h2>Subscribe to Our Newsletter</h2>
+        <p>Get the latest posts delivered right to your inbox</p>
+        <form class="newsletter-form">
+            <input type="email" placeholder="Enter your email" required>
+            <button type="submit" class="subscribe-btn">Subscribe</button>
+        </form>
+    </div>
+    <div class="feedback-content" style="margin-top:2rem;">
+        <h2>Feedback</h2>
+        <p>Tell us what you think about the blog</p>
+        <form class="feedback-form">
+            <input type="text" placeholder="Your name" required>
+            <input type="email" placeholder="Your email" required>
+            <textarea placeholder="Your feedback" rows="4" required></textarea>
+            <button type="submit" class="btn">Send Feedback</button>
+        </form>
+    </div>
+</section>
     </main>
 
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-section">
                 <h3>About Us</h3>
-                <p>Sharing knowledge and ideas through quality content.</p>
+                <p id="about">Sharing knowledge and ideas through quality content.</p>
             </div>
             <div class="footer-section">
                 <h3>Quick Links</h3>
@@ -104,7 +134,6 @@
                     <li><a href="#">Home</a></li>
                     <li><a href="#featured">Featured</a></li>
                     <li><a href="#">About</a></li>
-                    <li><a href="#">Contact</a></li>
                 </ul>
             </div>
             <div class="footer-section">
@@ -119,9 +148,11 @@
         </div>
         <div class="footer-bottom">
             <p>&copy; 2023 MyBlog. All rights reserved.</p>
+            <a href="dashboard.html" class="admin">Admin</a>
         </div>
     </footer>
 
     <script src="/js/main.js"></script>
+    <script src="/js/blog.js"></script>
 </body>
 </html>
