@@ -97,3 +97,7 @@ typings/
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Local Data
+mongo_data/
+uploads/
