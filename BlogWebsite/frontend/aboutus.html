@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - BlogNest</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/CSS/style.css">
+    <style>
+        .about-hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://source.unsplash.com/random/1600x600?team,office');
+            background-size: cover;
+            background-position: center;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+        }
+
+        .about-hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+        }
+
+        .about-section {
+            padding: 80px 0;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .about-image img {
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .about-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+
+        .about-content p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            color: var(--light-text);
+        }
+
+        .team-section {
+            background-color: var(--light-bg);
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .team-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            padding: 0 20px;
+        }
+
+        .team-member {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .team-member:hover {
+            transform: translateY(-10px);
+        }
+
+        .member-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            overflow: hidden;
+        }
+
+        .member-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .team-member h3 {
+            margin-bottom: 5px;
+            color: var(--text-color);
+        }
+
+        .team-member .role {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .team-member p {
+            color: var(--light-text);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .about-hero h1 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <div class="logo">BlogNest</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#featured">Featured</a></li>
+                <li><a href="index.html#featured">Blog</a></li>
+                <li><a href="aboutus.html" class="active">About Us</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="signup.html" class="signup-btn">Sign Up</a></li>
+            </ul>
+            <div class="nav-right">
+                <div id="user-menu" style="display:none; color:white;">
+                    <a href="#" onclick="logout()" style="margin-left:12px; color:white; font-weight:600;">Logout</a>
+                </div>
+                <div class="hamburger">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="about-hero"
+            style="background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://source.unsplash.com/random/1600x600?technology,code'); background-size: cover; background-position: center;">
+            <div class="container">
+                <h1>Innovating the Future</h1>
+                <p>Your source for the latest in technology, coding, and digital transformation.</p>
+            </div>
+        </div>
+
+        <section class="about-section">
+            <div class="container">
+                <div class="about-grid">
+                    <div class="about-image">
+                        <img src="https://images.unsplash.com/photo-1499750310159-5b5f226932b7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                            alt="Tech Innovation">
+                    </div>
+                    <div class="about-content">
+                        <h2>Our Mission</h2>
+                        <p>Founded in 2025, BlogNest was born from a passion for code and a curiosity for the future. We
+                            are a community of developers, engineers, and tech enthusiasts dedicated to demystifying
+                            complex technologies.</p>
+                        <p>From the latest breakthroughs in Artificial Intelligence to the fundamentals of clean code,
+                            our platform serves as a knowledge hub for the digital age. We believe that technology is
+                            the most powerful tool for change, and understanding it shouldn't be a privilege.</p>
+                        <p>Whether you're a seasoned CTO or a student writing your first "Hello World", BlogNest
+                            provides the insights, tutorials, and community you need to stay ahead in the rapidly
+                            evolving world of tech.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- <section class="team-section">
+            <div class="container">
+                <h2>The Tech Minds</h2>
+                <div class="team-grid">
+                    <div class="team-member">
+                        <div class="member-img">
+                            <img src="https://source.unsplash.com/random/200x200?person,tech" alt="Team Member">
+                        </div>
+                        <h3>Sarah Johnson</h3>
+                        <span class="role">Chief Technology Officer</span>
+                        <p>Ex-Google engineer with a passion for distributed systems and AI ethics. Sarah architects the
+                            vision of BlogNest.</p>
+                    </div>
+                    <div class="team-member">
+                        <div class="member-img">
+                            <img src="https://source.unsplash.com/random/200x200?developer" alt="Team Member">
+                        </div>
+                        <h3>David Chen</h3>
+                        <span class="role">Lead Full Stack Developer</span>
+                        <p>A wizard with JavaScript and Rust. David ensures our platform is blazing fast and rock-solid
+                            secure.</p>
+                    </div>
+                    <div class="team-member">
+                        <div class="member-img">
+                            <img src="https://source.unsplash.com/random/200x200?hacker" alt="Team Member">
+                        </div>
+                        <h3>Emily Rodriguez</h3>
+                        <span class="role">DevOps Engineer</span>
+                        <p>Master of CI/CD pipelines and cloud infrastructure. Emily keeps our servers humming 24/7.</p>
+                    </div>
+                    <div class="team-member">
+                        <div class="member-img">
+                            <img src="https://source.unsplash.com/random/200x200?designer,ui" alt="Team Member">
+                        </div>
+                        <h3>Michael Chang</h3>
+                        <span class="role">Product Designer</span>
+                        <p>Bridging the gap between complex code and intuitive user interfaces. Michael makes tech
+                            accessible.</p>
+                    </div>
+                </div>
+            </div>
+        </section> -->
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Us</h3>
+                <p>Sharing knowledge and ideas through quality content.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html#featured">Featured</a></li>
+                    <li><a href="aboutus.html">About</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Connect With Us</h3>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 BlogNest. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+    <script src="/js/blog.js"></script>
+</body>
+
+</html>

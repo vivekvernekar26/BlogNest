@@ -11,7 +11,7 @@ async function fetchPosts() {
         showLoading();
         const response = await fetch(`${API_URL}/posts`);
         const data = await response.json();
-        
+
         if (data.status === 'success') {
             displayPosts(data.data.posts);
         } else {
@@ -35,7 +35,7 @@ function displayPosts(posts) {
     const postsHTML = posts.map(post => `
         <article class="post-card">
             <div class="post-image">
-                <img src="https://source.unsplash.com/random/400x300?blog,${post.id}" alt="${post.title}">
+                <img src="${post.image || `https://source.unsplash.com/random/400x300?blog,${post._id}`}" alt="${post.title}">
             </div>
             <div class="post-content">
                 <h3>${post.title}</h3>
@@ -44,7 +44,7 @@ function displayPosts(posts) {
                     <span class="author">By ${post.authorName || 'Anonymous'}</span>
                     <span class="date">${new Date(post.createdAt).toLocaleDateString()}</span>
                 </div>
-                <a href="post.html?id=${post.id}" class="read-more">Read More</a>
+                <a href="post.html?id=${post._id}" class="read-more">Read More</a>
             </div>
         </article>
     `).join('');
@@ -88,7 +88,7 @@ if (window.location.pathname.endsWith('post.html')) {
     document.addEventListener('DOMContentLoaded', () => {
         const urlParams = new URLSearchParams(window.location.search);
         const postId = urlParams.get('id');
-        
+
         if (postId) {
             fetchPost(postId);
         } else {
@@ -103,7 +103,7 @@ async function fetchPost(postId) {
         showLoading();
         const response = await fetch(`${API_URL}/posts/${postId}`);
         const data = await response.json();
-        
+
         if (data.status === 'success') {
             displayPost(data.data.post);
         } else {
@@ -128,6 +128,7 @@ function displayPost(post) {
 
     postContainer.innerHTML = `
         <article class="post-full">
+            ${post.image ? `<div class="post-image-full" style="margin-bottom: 30px;"><img src="${post.image}" alt="${post.title}" style="width: 100%; max-height: 500px; object-fit: cover; border-radius: 12px;"></div>` : ''}
             <h1>${post.title}</h1>
             <div class="post-meta">
                 <span class="author">By ${post.authorName || 'Anonymous'}</span>
@@ -140,8 +141,8 @@ function displayPost(post) {
                 <a href="index.html" class="btn btn-back">← Back to Posts</a>
                 ${post.author === getCurrentUser()?.id ? `
                     <div class="post-actions-right">
-                        <a href="edit.html?id=${post.id}" class="btn btn-edit">Edit Post</a>
-                        <button class="btn btn-delete" onclick="deletePost('${post.id}')">Delete</button>
+                        <a href="edit.html?id=${post._id}" class="btn btn-edit">Edit Post</a>
+                        <button class="btn btn-delete" onclick="deletePost('${post._id}')">Delete</button>
                     </div>
                 ` : ''}
             </div>
@@ -162,15 +163,22 @@ function checkAuth() {
     const signupLink = document.querySelector('a[href="signup.html"]');
     const createPostLink = document.querySelector('a[href="create.html"]');
     const userMenu = document.getElementById('user-menu');
-    const usernameSpan = document.getElementById('username');
 
     if (user) {
         // User is logged in
         if (loginLink) loginLink.style.display = 'none';
         if (signupLink) signupLink.style.display = 'none';
         if (userMenu) userMenu.style.display = 'block';
-        if (usernameSpan) usernameSpan.textContent = user.name;
         if (createPostLink) createPostLink.style.display = 'inline-block';
+
+        // Add My Blogs link if not exists
+        if (!document.querySelector('a[href="my-blogs.html"]')) {
+            const navLinks = document.querySelector('.nav-links');
+            const myBlogsLi = document.createElement('li');
+            myBlogsLi.innerHTML = '<a href="my-blogs.html">My Blogs</a>';
+            // Insert after Home (index 1)
+            navLinks.insertBefore(myBlogsLi, navLinks.children[1]);
+        }
     } else {
         // User is not logged in
         if (loginLink) loginLink.style.display = 'inline-block';

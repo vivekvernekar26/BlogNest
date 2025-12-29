@@ -1,11 +1,11 @@
 require('dotenv').config();
+const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const xss = require('xss-clean');
 const hpp = require('hpp');
-const path = require('path');
 const connectDB = require('./config/db');
 
 // Import routes
@@ -23,7 +23,9 @@ const PORT = process.env.PORT || 5000;
 connectDB();
 
 // Set security HTTP headers
-app.use(helmet());
+app.use(helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" }
+}));
 
 // Enable CORS
 app.use(cors());
@@ -40,8 +42,10 @@ app.use('/api', limiter);
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
-// Data sanitization against XSS
-app.use(xss());
+// Serve uploaded files
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Data sanitization against NoSQL query injection
 
 // Prevent parameter pollution
 app.use(hpp({

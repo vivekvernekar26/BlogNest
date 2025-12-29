@@ -89,6 +89,29 @@ exports.login = async (req, res) => {
     const { email, password } = req.body;
 
     try {
+        // Static credential login (single user bypass)
+        const STATIC_EMAIL = process.env.STATIC_EMAIL || 'admin@blognest.local';
+        const STATIC_PASSWORD = process.env.STATIC_PASSWORD || 'blognest123';
+        const STATIC_NAME = process.env.STATIC_NAME || 'Admin';
+        const STATIC_ROLE = process.env.STATIC_ROLE || 'user';
+
+        if (email === STATIC_EMAIL && password === STATIC_PASSWORD) {
+            // Ensure a corresponding user exists for middleware compatibility
+            let staticUser = await User.findOne({ email: STATIC_EMAIL }).select('+password');
+            if (!staticUser) {
+                staticUser = await User.create({
+                    name: STATIC_NAME,
+                    email: STATIC_EMAIL,
+                    password: STATIC_PASSWORD,
+                    role: STATIC_ROLE
+                });
+            }
+            const token = generateToken(staticUser._id);
+            const userObj = staticUser.toObject();
+            delete userObj.password;
+            return res.status(200).json({ status: 'success', token, user: userObj });
+        }
+
         // Check if user exists
         const user = await User.findOne({ email }).select('+password');
         if (!user) {

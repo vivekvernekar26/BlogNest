@@ -1,16 +1,19 @@
 const express = require('express');
-const { protect, authorize } = require('../middleware/authMiddleware');
+const { protect } = require('../middleware/authMiddleware');
+const upload = require('../middleware/uploadMiddleware');
 const {
     getPosts,
     getPost,
     createPost,
     updatePost,
     deletePost,
-    getPendingPosts,
-    approvePost
+    getMyPosts
 } = require('../controllers/blogController');
 
 const router = express.Router();
+
+// Specific routes must come before generic :id routes
+router.get('/my-posts', protect, getMyPosts);
 
 // Public routes
 router.route('/')
@@ -22,18 +25,14 @@ router.route('/:id')
 // Protected routes (require authentication)
 router.use(protect);
 
+
 router.route('/')
-    .post(createPost);
+    .post(upload.single('image'), createPost);
 
 router.route('/:id')
-    .patch(updatePost)
+    .patch(upload.single('image'), updatePost)
     .delete(deletePost);
 
-// Admin routes
-router.route('/admin/pending')
-    .get(authorize('admin'), getPendingPosts);
-
-router.route('/admin/:id/approve')
-    .patch(authorize('admin'), approvePost);
+// Admin routes removed
 
 module.exports = router;

@@ -1,0 +1,6 @@
+{
+    "ignore": [
+        "mongo_data/*",
+        "mongo_data"
+    ]
+}
