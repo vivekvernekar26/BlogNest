@@ -129,6 +129,96 @@ BlogNest/
    - Frontend: `http://localhost:8000`
    - Backend API: `http://localhost:5000`
 
+## 🎯 How to Run the Project
+
+Follow these steps to run the BlogNest application on your local machine:
+
+### Step 1: Start MongoDB
+
+Open a terminal and navigate to the backend directory, then start MongoDB:
+
+```bash
+cd /path/to/BlogNest/backend
+mongod --dbpath ./mongo_data --logpath ./mongod.log --fork
+```
+
+This will start MongoDB in the background using the local `mongo_data` directory.
+
+### Step 2: Start the Backend Server
+
+In the same terminal (or a new one), navigate to the backend directory and start the server:
+
+```bash
+cd /path/to/BlogNest/backend
+npm run dev
+```
+
+You should see:
+```
+Server running in development mode on port 5000
+MongoDB connected: localhost
+```
+
+**Keep this terminal running** - the backend server is now active on `http://localhost:5000`
+
+### Step 3: Start the Frontend Server
+
+Open a **new terminal window** and navigate to the frontend directory:
+
+```bash
+cd /path/to/BlogNest/frontend
+python3 -m http.server 8000
+```
+
+Alternatively, you can use Node.js http-server:
+```bash
+npx http-server -p 8000
+```
+
+**Keep this terminal running** - the frontend is now being served on `http://localhost:8000`
+
+### Step 4: Access the Application
+
+Open your web browser and navigate to:
+```
+http://localhost:8000
+```
+
+You can now:
+- **Sign up** for a new account at `http://localhost:8000/signup.html`
+- **Log in** at `http://localhost:8000/login.html`
+- **Create blog posts** after logging in
+- **View all posts** on the homepage
+- **Manage your posts** from the dashboard
+
+### Stopping the Application
+
+To stop the servers:
+
+1. **Stop Frontend Server**: Press `Ctrl+C` in the terminal running the frontend server
+2. **Stop Backend Server**: Press `Ctrl+C` in the terminal running the backend server
+3. **Stop MongoDB** (optional):
+   ```bash
+   mongod --shutdown --dbpath ./backend/mongo_data
+   ```
+
+### Quick Start Commands
+
+For quick reference, here are the commands to run everything:
+
+```bash
+# Terminal 1 - Backend
+cd backend
+mongod --dbpath ./mongo_data --logpath ./mongod.log --fork
+npm run dev
+
+# Terminal 2 - Frontend
+cd frontend
+python3 -m http.server 8000
+```
+
+Then open `http://localhost:8000` in your browser.
+
 ## 📝 API Endpoints
 
 ### Authentication
@@ -183,9 +273,6 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
 
 ## 👤 Author
 
