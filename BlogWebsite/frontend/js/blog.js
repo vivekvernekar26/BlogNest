@@ -139,7 +139,7 @@ function displayPost(post) {
             </div>
             <div class="post-actions">
                 <a href="index.html" class="btn btn-back">← Back to Posts</a>
-                ${post.author === getCurrentUser()?.id ? `
+                ${(post.author === getCurrentUser()?._id || post.author === getCurrentUser()?.id) ? `
                     <div class="post-actions-right">
                         <a href="edit.html?id=${post._id}" class="btn btn-edit">Edit Post</a>
                         <button class="btn btn-delete" onclick="deletePost('${post._id}')">Delete</button>
@@ -185,6 +185,33 @@ function checkAuth() {
         if (signupLink) signupLink.style.display = 'inline-block';
         if (userMenu) userMenu.style.display = 'none';
         if (createPostLink) createPostLink.style.display = 'none';
+    }
+}
+
+// Delete post function
+async function deletePost(postId) {
+    if (!confirm('Are you sure you want to delete this post?')) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_URL}/posts/${postId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+
+        if (response.status === 204 || response.ok) {
+            alert('Post deleted successfully');
+            window.location.href = 'my-blogs.html';
+        } else {
+            const data = await response.json();
+            alert(data.message || 'Failed to delete post');
+        }
+    } catch (error) {
+        console.error('Error deleting post:', error);
+        alert('Error deleting post');
     }
 }
 
