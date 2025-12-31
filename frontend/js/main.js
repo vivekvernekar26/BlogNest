@@ -31,7 +31,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         e.preventDefault();
         const targetId = this.getAttribute('href');
         if (targetId === '#') return;
-        
+
         const targetElement = document.querySelector(targetId);
         if (targetElement) {
             window.scrollTo({
@@ -45,11 +45,11 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // Add animation classes to elements when they come into view
 const animateOnScroll = () => {
     const elements = document.querySelectorAll('.post-card, .newsletter, .footer-section');
-    
+
     elements.forEach((element, index) => {
         const elementPosition = element.getBoundingClientRect().top;
         const screenPosition = window.innerHeight / 1.3;
-        
+
         if (elementPosition < screenPosition) {
             element.classList.add('animate-fadeInUp');
             element.style.animationDelay = `${index * 0.1}s`;
@@ -64,16 +64,73 @@ window.addEventListener('scroll', animateOnScroll);
 // Newsletter form submission
 const newsletterForm = document.querySelector('.newsletter-form');
 if (newsletterForm) {
-    newsletterForm.addEventListener('submit', (e) => {
+    newsletterForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const emailInput = newsletterForm.querySelector('input[type="email"]');
         const email = emailInput.value.trim();
-        
+
         if (email) {
-            // Here you would typically send the email to your server
-            console.log('Subscribing email:', email);
-            alert('Thank you for subscribing to our newsletter!');
-            emailInput.value = '';
+            try {
+                const response = await fetch('http://localhost:5000/api/subscribe', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert(data.message);
+                    emailInput.value = '';
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error subscribing:', error);
+                alert('Failed to subscribe. Please try again later.');
+            }
+        }
+    });
+}
+
+// Feedback form submission
+const feedbackForm = document.querySelector('.feedback-form');
+if (feedbackForm) {
+    feedbackForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const nameInput = feedbackForm.querySelector('input[placeholder="Your name"]');
+        const emailInput = feedbackForm.querySelector('input[placeholder="Your email"]');
+        const feedbackInput = feedbackForm.querySelector('textarea[placeholder="Your feedback"]');
+
+        const feedbackData = {
+            name: nameInput.value.trim(),
+            email: emailInput.value.trim(),
+            feedback: feedbackInput.value.trim()
+        };
+
+        try {
+            const response = await fetch('http://localhost:5000/api/feedback', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(feedbackData)
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert('Thank you for your feedback!');
+                feedbackForm.reset();
+            } else {
+                alert('Error: ' + data.message);
+            }
+        } catch (error) {
+            console.error('Error submitting feedback:', error);
+            alert('Failed to send feedback. Please try again later.');
         }
     });
 }

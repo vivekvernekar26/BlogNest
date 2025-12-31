@@ -18,13 +18,15 @@ const connectDB = require('./config/db');
 // Import routes
 const authRoutes = require('./routes/authRoutes');
 const blogRoutes = require('./routes/blogRoutes');
+const feedbackRoutes = require('./routes/feedbackRoutes');
+const subscribeRoutes = require('./routes/subscribeRoutes');
 
 // Initialize express
 const app = express();
 
 // Environment variables
 const NODE_ENV = process.env.NODE_ENV || 'development';
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 // Connect to database
 connectDB();
@@ -64,6 +66,8 @@ app.use(hpp({
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', blogRoutes);
+app.use('/api/feedback', feedbackRoutes);
+app.use('/api/subscribe', subscribeRoutes);
 
 // Serve static assets in production
 if (NODE_ENV === 'production') {
